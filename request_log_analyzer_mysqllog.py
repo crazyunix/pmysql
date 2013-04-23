@@ -37,7 +37,7 @@ def Splitlog():
     if src_size > 500:
         os.system("mv msandbox-slow.log mysql-slow")
         try:
-            con = mdb.connect("localhost",'root','','',25562)
+            con = mdb.connect(host="localhost",user='root',passwd='',charset='utf-8',port=3306,unix_socket='/tmp/mysql.sock')
         except:
             print ('Could not connect to MySQL server!')
             sys.exit(0)
@@ -46,11 +46,11 @@ def Splitlog():
             #cur.execute("flush logs")
             #cur.execute("create database yong")
             con.close()
-        except:
-            print ('Could not flush!')
+        except Exception,e:
+            print e
             os.system("mv msandbox-slow.log msandbox-slow")
             sys.exit(0)
-        os.system("split -b 500M msandbox-slow slow`date + %F`")
+        os.system("split -b 500M msandbox-slow slow`date +%F`")
     else:
         os.system("mv msandbox-slow.log slow`date +%F`")
         try:
@@ -67,7 +67,8 @@ def Splitlog():
             con.close()
         except:
             print ('Could not flush!')
-            os.system("mv slow`date + %F` msandbox-slow.log")
+            if os.path.isfile(path+req_log):
+                os.system("mv slow`date +%F` msandbox-slow.log")
             sys.exit(0)
 
 
@@ -75,7 +76,7 @@ def Request_log():
     os.chdir(path)
     files=[os.path.basename(x) for x in  glob.glob(req_log + '*')]
     print files
-    date=time.strftime("%Y-%m-%d %H:%M:%S",(time.localtime()))
+    date=time.strftime("%Y-%m-%d",(time.localtime()))
     req = "request-log-analyzer %s/%s  --output HTML --mail ming.li@ihaveu.net --mailhost mail.haveu.net --mailsubject 'rails log-analyzer' --after %s" % ( path,files[-1],date)
     print req
     if len(files) == 1:
@@ -88,7 +89,7 @@ def Request_log():
 
 def Remove_log():
     if os.path.isfile(path+'msandbox-slow'):
-        os.system('mv /opt/mysql/sandboxes/rsandbox_5_1_47/master/data/msandbox-slog /opt/backup/mysql-slow')
+        os.system('mv /opt/mysql/sandboxes/rsandbox_5_1_47/master/data/msandbox-slow.log /opt/backup/mysql-slow')
         os.system('mv /opt/mysql/sandboxes/rsandbox_5_1_47/master/data/slow`date +%F`* /opt/backup-slow')
     else:
         os.system('mv /opt/mysql/sandboxes/rsandbox_5_1_47/master/data/slow`date +%F`* /opt/backup-slow')
