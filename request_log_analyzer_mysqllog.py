@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 '''
 #========================================================================
 #   FileName: request_log_analyzer_mysqllog.py
@@ -8,8 +10,6 @@
 #========================================================================
 '''
 import MySQLdb as mdb
-#!/usr/bin/env python
-# -*- coding: UTF-8 -*-
 import sys
 import os
 import glob
