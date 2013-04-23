@@ -51,6 +51,9 @@ def Splitlog():
         try:
             #cur = con.cursor()
             #cur.execute("flush logs")
+            cur = con.cursor()
+            cur.execute("show databases")
+            print "Databases all : %s" % cur.fetchall()
             con.close()
         except:
             print ('Could not flush!')
@@ -83,5 +86,5 @@ def Remove_log():
     
 if __name__ == '__main__':
    Splitlog()
-   Request_log()
-   Remove_log()
+   #Request_log()
+   #Remove_log()
