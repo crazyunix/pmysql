@@ -39,7 +39,7 @@ def Splitlog():
         try:
             con = mdb.connect(host="localhost",user='root',passwd='',charset='utf-8',port=3306,unix_socket='/tmp/mysql.sock')
         except:
-            print ('Could not connect to MySQL server!')
+            print 'Could not connect to MySQL server!'
             sys.exit(0)
         try:
             #cur = con.cursor()
@@ -56,17 +56,17 @@ def Splitlog():
         try:
             con = mdb.connect("localhost",'root','','',25562)
         except:
-            print ('Could not connect to MySQL server!')
+            print 'Could not connect to MySQL server!'
             sys.exit(0)
         try:
-            #cur = con.cursor()
-            #cur.execute("flush logs")
             cur = con.cursor()
-            cur.execute("show databases")
-            print "Databases all : %s" % cur.fetchall()
+            cur.execute("flush logs")
+            #cur = con.cursor()
+            #cur.execute("show databases")
+            #print "Databases all : %s" % cur.fetchall()
             con.close()
         except:
-            print ('Could not flush!')
+            print 'Could not flush!'
             if os.path.isfile(path+req_log):
                 os.system("mv slow`date +%F` msandbox-slow.log")
             sys.exit(0)
