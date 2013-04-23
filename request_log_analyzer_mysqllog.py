@@ -1,5 +1,15 @@
-#/usr/bin/env python
+'''
+#========================================================================
+#   FileName: request_log_analyzer_mysqllog.py
+#     Author: Crazyunix
+#      Email: crazyunix@163.com
+#   HomePage: http://www.yunvi.com
+# LastChange: 2013-04-23 15:29:37
+#========================================================================
+'''
 import MySQLdb as mdb
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 import sys
 import os
 import glob
@@ -86,5 +96,5 @@ def Remove_log():
     
 if __name__ == '__main__':
    Splitlog()
-   #Request_log()
-   #Remove_log()
+   Request_log()
+   Remove_log()
