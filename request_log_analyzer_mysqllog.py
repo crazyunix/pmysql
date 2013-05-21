@@ -15,8 +15,8 @@ import os
 import glob
 import time
 
-path = '/opt/mysql/sandboxes/rsandbox_5_1_47/master/data'
-slowlog='msandbox-slow.log'
+path = '/opt/mysql/'
+slowlog='mysql-slow.log'
 when = time.strftime('%Y-%m-%d',time.localtime())
 req_log = 'slow'+when
 
@@ -29,8 +29,8 @@ def Splitlog():
     except:
         print ("Permission denied")
         sys.exit(0)
-    if not os.path.isfile('msandbox-slow.log'):
-        print (path,'is not "msandbox-slow.log"')
+    if not os.path.isfile('mysql-slow.log'):
+        print (path,'is not "mysql-slow.log"')
         sys.exit(0)
 
     src_size = float('%.2f' % float('.'.join(str(x)for x in (divmod(os.path.getsize(slowlog),1024*1024)))))
@@ -48,11 +48,11 @@ def Splitlog():
             con.close()
         except Exception,e:
             print e
-            os.system("mv msandbox-slow.log msandbox-slow")
+            os.system("mv mysql-slow.log mysql-slow")
             sys.exit(0)
-        os.system("split -b 500M msandbox-slow slow`date +%F`")
+        os.system("split -b 500M mysql-slow slow`date +%F`")
     else:
-        os.system("mv msandbox-slow.log slow`date +%F`")
+        os.system("mv mysql-slow.log slow`date +%F`")
         try:
             con = mdb.connect("localhost",'root','','',25562)
         except:
@@ -68,7 +68,7 @@ def Splitlog():
         except:
             print 'Could not flush!'
             if os.path.isfile(path+req_log):
-                os.system("mv slow`date +%F` msandbox-slow.log")
+                os.system("mv slow`date +%F` mysql-slow.log")
             sys.exit(0)
 
 
@@ -77,22 +77,22 @@ def Request_log():
     files=[os.path.basename(x) for x in  glob.glob(req_log + '*')]
     print files
     date=time.strftime("%Y-%m-%d",(time.localtime()))
-    req = "request-log-analyzer %s/%s  --output HTML --mail ming.li@ihaveu.net --mailhost mail.haveu.net --mailsubject 'rails log-analyzer' --after %s" % ( path,files[-1],date)
+    req = "request-log-analyzer %s/%s  --output HTML --mail crazyunix@163.com --mailhost mail.163.com --mailsubject 'rails log-analyzer' --after %s" % ( path,files[-1],date)
     print req
     if len(files) == 1:
         os.system(req)
     else:
         for i in range(len(files)):
-            req1 = "request-log-analyzer %s/%s  --output HTML --mail ming.li@ihaveu.net --mailhost mail.ihaveu.net --mailsubject 'rails log-analyzer' --after %s" % (path,files[i],date)
+            req1 = "request-log-analyzer %s/%s  --output HTML --mail crazyunix@163.com --mailhost mail.163.com --mailsubject 'rails log-analyzer' --after %s" % (path,files[i],date)
             os.system(req1)
 
 
 def Remove_log():
     if os.path.isfile(path+'msandbox-slow'):
-        os.system('mv /opt/mysql/sandboxes/rsandbox_5_1_47/master/data/msandbox-slow.log /opt/backup/mysql-slow')
-        os.system('mv /opt/mysql/sandboxes/rsandbox_5_1_47/master/data/slow`date +%F`* /opt/backup-slow')
+        os.system('mv /opt/mysql/mysql-slow.log /opt/backup/mysql-slow')
+        os.system('mv /opt/mysql/slow`date +%F`* /opt/backup-slow')
     else:
-        os.system('mv /opt/mysql/sandboxes/rsandbox_5_1_47/master/data/slow`date +%F`* /opt/backup-slow')
+        os.system('mv /opt/mysql/slow`date +%F`* /opt/backup-slow')
 
     
 if __name__ == '__main__':
